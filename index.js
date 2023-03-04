@@ -1,6 +1,7 @@
 var http = require('http');
 var fs = require('fs');
 var mysql = require('mysql');
+var s = require('./select');
 
 con = mysql.createConnection({
   host: "localhost",
@@ -11,19 +12,14 @@ con = mysql.createConnection({
 var rst = "";
 con.connect(function(err) {
   if (err) throw err;
-  con.query("select * from tbtest", function (err, result, fields) {
+  //console.log(s.qry());
+  con.query(s.qry(), function (err, result, fields) {
     if (err) throw err;
-    console.log(result);
-    rst = result;
+    rst = s.outputOfSelect(result);
   });
 });
 
 http.createServer(function (req, res) {
-    res.writeHead(200, {'Content-Type': 'text/plain'});
-    res.end('Result: ' + rst);
-    /*fs.readFile('index.html', function(err, data) {
-      res.writeHead(200, {'Content-Type': 'text/html'});
-      res.write(data);
-      return res.end();
-    });*/
+    res.writeHead(200, {'Content-Type': 'text/html'});
+    res.end(rst);
   }).listen(8080);
