@@ -1,7 +1,13 @@
 var http = require('http');
 var fs = require('fs');
 var mysql = require('mysql');
-var s = require('./select');
+var s1 = require('./select');
+var s2 = require('./insert');
+var s3 = require('./update');
+var s4 = require('./delete');
+
+var s = s1;
+
 
 con = mysql.createConnection({
   host: "localhost",
@@ -15,7 +21,7 @@ con.connect(function(err) {
   //console.log(s.qry());
   con.query(s.qry(), function (err, result, fields) {
     if (err) throw err;
-    rst = s.outputOfSelect(result);
+    rst = s.outputResult(result);
   });
 });
 
