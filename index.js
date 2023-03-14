@@ -6,7 +6,15 @@ var s2 = require('./insert');
 var s3 = require('./update');
 var s4 = require('./delete');
 
-var s = s1;
+var s = s1; //Select operation
+var z = "select";
+if(z === 'select') {
+  z = s.qry();
+} else if(z === 'insert' || z === 'delete') {
+  z = s.qry(1);
+} else if (z === 'update') {
+  z = s.qry(1, 'updated');
+}
 
 
 con = mysql.createConnection({
@@ -17,9 +25,8 @@ con = mysql.createConnection({
 });
 var rst = "";
 con.connect(function(err) {
-  if (err) throw err;
-  //console.log(s.qry());
-  con.query(s.qry(), function (err, result, fields) {
+  if (err) throw err;  
+  con.query(z, function (err, result, fields) {
     if (err) throw err;
     rst = s.outputResult(result);
   });
